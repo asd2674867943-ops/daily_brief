@@ -1,0 +1,24 @@
+{
+  "date": "2026-02-25",
+  "generated_at": "2026-02-25T22:10:00+08:00",
+  "summary": {
+    "headline": "欢迎使用每日简报！系统将在每天22:10（北京时间）自动更新今日新闻总结。",
+    "points": [
+      "本项目通过 GitHub Actions 每天自动抓取新华社、人民日报等官方媒体要闻",
+      "使用 Claude AI 进行智能总结，生成结构化的新闻联播风格摘要",
+      "科技、AI、综合新闻同步更新，覆盖国内外重要资讯",
+      "数据以 JSON 格式存储，前端实时读取展示",
+      "请在 GitHub 仓库 Settings → Secrets 中配置 ANTHROPIC_API_KEY 以启用 AI 功能"
+    ],
+    "comment": "每日自动更新，无需人工干预，打开即可看到最新总结。",
+    "generated_at": "2026-02-25 22:10",
+    "model": "claude-opus-4-6",
+    "item_count": 0
+  },
+  "news": {
+    "cctv": [],
+    "tech": [],
+    "ai": [],
+    "general": []
+  }
+}

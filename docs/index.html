@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日简报 · Daily Brief</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08080e;
+  --surface: #0f0f18;
+  --card: #14141e;
+  --border: #1f1f2e;
+  --accent: #e8c547;
+  --accent-glow: rgba(232,197,71,0.15);
+  --blue: #4fc3f7;
+  --blue-glow: rgba(79,195,247,0.12);
+  --red: #c62828;
+  --red-glow: rgba(198,40,40,0.15);
+  --text: #dde0f0;
+  --muted: #5a5a72;
+  --success: #4caf50;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Serif SC', serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Background texture ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(ellipse 80% 60% at 20% -10%, rgba(79,195,247,0.04) 0%, transparent 60%),
+                    radial-gradient(ellipse 60% 50% at 80% 110%, rgba(232,197,71,0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Header ── */
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8,8,14,0.88);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  height: 60px;
+  display: flex; align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+}
+
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px; letter-spacing: 4px;
+  color: var(--accent);
+  text-shadow: 0 0 40px rgba(232,197,71,0.5);
+  flex-shrink: 0;
+}
+.logo em { color: var(--text); opacity: 0.3; font-style: normal; }
+
+.header-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  border-left: 1px solid var(--border);
+  padding-left: 16px;
+}
+
+.spacer { flex: 1; }
+
+.status-dot {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--muted);
+  letter-spacing: 1.5px;
+}
+.status-dot::before {
+  content: ''; width: 6px; height: 6px;
+  background: var(--success); border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.4;transform:scale(0.7)}
+}
+
+.date-nav {
+  display: flex; align-items: center; gap: 6px;
+}
+
+.nav-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--muted); padding: 5px 10px;
+  border-radius: 6px; cursor: pointer;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  transition: all .2s;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+.date-select {
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); padding: 5px 10px; border-radius: 6px;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  cursor: pointer; outline: none;
+}
+
+/* ── Main layout ── */
+.main {
+  position: relative; z-index: 1;
+  max-width: 1440px; margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 360px;
+  grid-template-areas:
+    "cctv cctv cctv"
+    "tech ai sidebar"
+    "general general sidebar";
+  gap: 20px;
+}
+
+/* ── CCTV Banner ── */
+.cctv-banner {
+  grid-area: cctv;
+  background: linear-gradient(135deg, #1a0808 0%, #200a0a 100%);
+  border: 1px solid rgba(198,40,40,0.35);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.cctv-top {
+  background: var(--red);
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+
+.cctv-logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 3px; color: #fff;
+}
+
+.cctv-badge {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8);
+  padding: 3px 8px; border-radius: 20px;
+  letter-spacing: 1.5px;
+}
+
+.cctv-time {
+  margin-left: auto;
+  font-family: 'DM Mono', monospace; font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+
+.cctv-content {
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.summary-block { }
+
+.summary-label {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: #ef9a9a; margin-bottom: 10px;
+}
+
+.headline-text {
+  font-size: 14px; line-height: 1.8; color: var(--text);
+  font-weight: 600;
+}
+
+.points-list {
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.point-item {
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: 12px; line-height: 1.7; color: rgba(221,224,240,0.8);
+}
+
+.point-bullet {
+  color: var(--red); flex-shrink: 0;
+  margin-top: 2px; font-size: 10px;
+}
+
+.comment-text {
+  font-size: 13px; line-height: 1.8;
+  color: rgba(221,224,240,0.6);
+  font-style: italic;
+  border-left: 2px solid rgba(198,40,40,0.4);
+  padding-left: 12px;
+}
+
+.ai-meta {
+  margin-top: 12px;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--muted); letter-spacing: 0.5px;
+}
+
+/* ── Section panels ── */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+
+.panel-tag {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px;
+}
+.panel-tag.yellow { background:rgba(232,197,71,0.1); color:var(--accent); border:1px solid rgba(232,197,71,0.2); }
+.panel-tag.blue   { background:rgba(79,195,247,0.1); color:var(--blue); border:1px solid rgba(79,195,247,0.2); }
+.panel-tag.white  { background:rgba(221,224,240,0.06); color:var(--text); border:1px solid var(--border); }
+
+.panel-count {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--muted); margin-left: auto;
+}
+
+.panel-body {
+  padding: 12px;
+  max-height: 480px; overflow-y: auto;
+}
+.panel-body::-webkit-scrollbar { width: 3px; }
+.panel-body::-webkit-scrollbar-track { background: transparent; }
+.panel-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── News cards ── */
+.news-card {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: 8px;
+  position: relative;
+}
+.news-card:last-child { margin-bottom: 0; }
+.news-card:hover {
+  background: var(--card);
+  border-color: var(--border);
+  transform: translateX(2px);
+}
+
+.card-top { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+.card-source {
+  font-family:'DM Mono',monospace; font-size:9px;
+  color:var(--muted); letter-spacing:1px;
+}
+.card-new {
+  font-family:'DM Mono',monospace; font-size:8px;
+  padding:1px 5px; border-radius:3px;
+  background:rgba(239,83,80,0.15); color:#ef9a9a;
+  border:1px solid rgba(239,83,80,0.2);
+}
+.card-time { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); margin-left:auto; }
+.card-title { font-size:13px; line-height:1.6; color:var(--text); font-weight:600; }
+.card-desc { font-size:11px; line-height:1.7; color:var(--muted); margin-top:4px; }
+
+/* ── Sidebar ── */
+.sidebar { grid-area: sidebar; display:flex; flex-direction:column; gap:16px; }
+
+.tech-panel { grid-area: tech; }
+.ai-panel { grid-area: ai; }
+.general-panel { grid-area: general; }
+
+/* General grid */
+.general-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+  padding: 12px;
+}
+
+/* ── Sidebar widgets ── */
+.widget {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.widget-title {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px;
+}
+
+.stat-row {
+  display: flex; justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-label { font-size: 13px; color: var(--text); }
+.stat-value {
+  font-family: 'DM Mono', monospace; font-size: 14px;
+  color: var(--accent); font-weight: 500;
+}
+
+.history-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 6px;
+  cursor: pointer; transition: background .15s;
+  margin-bottom: 2px;
+}
+.history-item:hover { background: var(--card); }
+.history-date {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--text);
+}
+.history-arrow { margin-left: auto; color: var(--muted); font-size: 12px; }
+
+/* ── Loading ── */
+.skeleton {
+  background: linear-gradient(90deg, var(--card) 25%, var(--border) 50%, var(--card) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes shimmer {
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+
+/* ── Loading overlay ── */
+.loading-overlay {
+  position: fixed; inset: 0; z-index: 999;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px;
+  transition: opacity .4s;
+}
+.loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.loading-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px; letter-spacing: 6px;
+  color: var(--accent);
+  text-shadow: 0 0 60px rgba(232,197,71,0.6);
+}
+
+.loading-bar {
+  width: 200px; height: 2px;
+  background: var(--border); border-radius: 1px; overflow: hidden;
+}
+.loading-bar-inner {
+  height: 100%; background: var(--accent);
+  animation: loading 1.5s ease-in-out infinite;
+}
+@keyframes loading {
+  0%{width:0;margin-left:0}
+  50%{width:60%;margin-left:20%}
+  100%{width:0;margin-left:100%}
+}
+
+.loading-text {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--muted); letter-spacing: 2px;
+}
+
+/* ── Empty state ── */
+.empty-state {
+  padding: 32px; text-align: center;
+  color: var(--muted); font-size: 13px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .main {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "cctv cctv"
+      "tech ai"
+      "general general"
+      "sidebar sidebar";
+  }
+}
+
+@media (max-width: 680px) {
+  .main {
+    grid-template-columns: 1fr;
+    grid-template-areas: "cctv" "tech" "ai" "general" "sidebar";
+    padding: 12px;
+    gap: 14px;
+  }
+  header { padding: 0 14px; gap: 10px; }
+  .header-date { display: none; }
+  .logo { font-size: 22px; }
+  .cctv-content { grid-template-columns: 1fr; }
+  .nav-btn span { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-logo">DAILY BRIEF</div>
+  <div class="loading-bar"><div class="loading-bar-inner"></div></div>
+  <div class="loading-text">正在加载今日简报…</div>
+</div>
+
+<header>
+  <div class="logo">DAILY<em> · </em>BRIEF</div>
+  <div class="header-date" id="headerDate">—</div>
+  <div class="spacer"></div>
+  <div class="status-dot" id="statusDot">AUTO</div>
+  <div class="date-nav">
+    <button class="nav-btn" id="prevBtn" onclick="navigateDate(-1)" title="前一天">◀ <span>前天</span></button>
+    <select class="date-select" id="dateSelect" onchange="loadDate(this.value)"></select>
+    <button class="nav-btn" id="nextBtn" onclick="navigateDate(1)" title="后一天"><span>后天</span> ▶</button>
+  </div>
+</header>
+
+<div class="main" id="mainContent">
+
+  <!-- CCTV AI Summary Banner -->
+  <div class="cctv-banner">
+    <div class="cctv-top">
+      <div class="cctv-logo-text">📺 新闻联播</div>
+      <div class="cctv-badge">AI SUMMARY</div>
+      <div class="cctv-time" id="summaryTime">—</div>
+    </div>
+    <div class="cctv-content">
+      <div class="summary-block">
+        <div class="summary-label">今日头条</div>
+        <div class="headline-text" id="summaryHeadline">
+          <div class="skeleton" style="height:14px;margin-bottom:8px"></div>
+          <div class="skeleton" style="height:14px;width:80%"></div>
+        </div>
+        <div class="ai-meta" id="aiMeta"></div>
+      </div>
+      <div class="summary-block">
+        <div class="summary-label">要点速览</div>
+        <div class="points-list" id="summaryPoints">
+          <div class="skeleton" style="height:12px;margin-bottom:6px"></div>
+          <div class="skeleton" style="height:12px;width:85%;margin-bottom:6px"></div>
+          <div class="skeleton" style="height:12px;width:90%;margin-bottom:6px"></div>
+          <div class="skeleton" style="height:12px;width:75%"></div>
+        </div>
+      </div>
+      <div class="summary-block">
+        <div class="summary-label">今日点评</div>
+        <div class="comment-text" id="summaryComment">
+          <div class="skeleton" style="height:12px;margin-bottom:6px"></div>
+          <div class="skeleton" style="height:12px;width:70%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech News -->
+  <div class="panel tech-panel">
+    <div class="panel-header">
+      <span class="panel-tag yellow">科技资讯</span>
+      <span class="panel-count" id="techCount">—</span>
+    </div>
+    <div class="panel-body" id="techNews">
+      <div class="skeleton" style="height:70px;border-radius:8px;margin-bottom:8px"></div>
+      <div class="skeleton" style="height:70px;border-radius:8px;margin-bottom:8px"></div>
+      <div class="skeleton" style="height:70px;border-radius:8px"></div>
+    </div>
+  </div>
+
+  <!-- AI News -->
+  <div class="panel ai-panel">
+    <div class="panel-header">
+      <span class="panel-tag blue">AI 动态</span>
+      <span class="panel-count" id="aiCount">—</span>
+    </div>
+    <div class="panel-body" id="aiNews">
+      <div class="skeleton" style="height:70px;border-radius:8px;margin-bottom:8px"></div>
+      <div class="skeleton" style="height:70px;border-radius:8px;margin-bottom:8px"></div>
+      <div class="skeleton" style="height:70px;border-radius:8px"></div>
+    </div>
+  </div>
+
+  <!-- General News -->
+  <div class="panel general-panel">
+    <div class="panel-header">
+      <span class="panel-tag white">综合资讯</span>
+      <span class="panel-count" id="generalCount">—</span>
+    </div>
+    <div class="general-grid" id="generalNews">
+      <div class="skeleton" style="height:70px;border-radius:8px"></div>
+      <div class="skeleton" style="height:70px;border-radius:8px"></div>
+      <div class="skeleton" style="height:70px;border-radius:8px"></div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Stats -->
+    <div class="widget">
+      <div class="widget-title">📊 今日统计</div>
+      <div id="statsWidget">
+        <div class="stat-row"><span class="stat-label">新闻条数</span><span class="stat-value" id="statTotal">—</span></div>
+        <div class="stat-row"><span class="stat-label">科技资讯</span><span class="stat-value" id="statTech">—</span></div>
+        <div class="stat-row"><span class="stat-label">AI 动态</span><span class="stat-value" id="statAi">—</span></div>
+        <div class="stat-row"><span class="stat-label">综合资讯</span><span class="stat-value" id="statGeneral">—</span></div>
+        <div class="stat-row"><span class="stat-label">AI 总结</span><span class="stat-value" id="statModel">—</span></div>
+        <div class="stat-row"><span class="stat-label">更新时间</span><span class="stat-value" id="statTime">—</span></div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="widget">
+      <div class="widget-title">📅 历史记录</div>
+      <div id="historyList">
+        <div class="skeleton" style="height:36px;border-radius:6px;margin-bottom:4px"></div>
+        <div class="skeleton" style="height:36px;border-radius:6px;margin-bottom:4px"></div>
+        <div class="skeleton" style="height:36px;border-radius:6px"></div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="widget">
+      <div class="widget-title">ℹ️ 关于</div>
+      <div style="font-size:12px;line-height:1.8;color:var(--muted)">
+        每日简报由 <strong style="color:var(--text)">GitHub Actions</strong> 自动运行，每天 <strong style="color:var(--accent)">北京时间 22:10</strong> 自动抓取新闻并用 Claude AI 生成总结。
+        <br><br>
+        数据来源：新华社、人民日报、BBC 中文、路透社、HackerNews、MIT TR、VentureBeat 等。
+        <br><br>
+        <a href="https://github.com" target="_blank" style="color:var(--accent);font-family:'DM Mono',monospace;font-size:11px;">⭐ 查看源码 →</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── State ───────────────────────────────────────────────
+let availableDates = [];
+let currentDateIdx = 0;
+const DATA_BASE = './data/';
+
+// ─── Fetch helpers ───────────────────────────────────────
+async function fetchJSON(url) {
+  const r = await fetch(url + '?t=' + Date.now());
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+// ─── Format ──────────────────────────────────────────────
+function relativeTime(ts) {
+  const diff = (Date.now() / 1000 - ts) / 60;
+  if (diff < 60) return `${Math.round(diff)}分钟前`;
+  if (diff < 1440) return `${Math.round(diff/60)}小时前`;
+  return `${Math.round(diff/1440)}天前`;
+}
+
+function formatDate(str) {
+  const d = new Date(str);
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+}
+
+// ─── Render news cards ───────────────────────────────────
+function renderCard(item) {
+  const now = Date.now() / 1000;
+  const isNew = (now - item.timestamp) < 7200;
+  return `
+    <div class="news-card" onclick="window.open('${item.link}','_blank')">
+      <div class="card-top">
+        <span class="card-source">${item.source}</span>
+        ${isNew ? '<span class="card-new">NEW</span>' : ''}
+        <span class="card-time">${relativeTime(item.timestamp)}</span>
+      </div>
+      <div class="card-title">${item.title}</div>
+      ${item.summary ? `<div class="card-desc">${item.summary}…</div>` : ''}
+    </div>`;
+}
+
+// ─── Render sections ─────────────────────────────────────
+function renderSection(items, containerId, countId, limit=10) {
+  const container = document.getElementById(containerId);
+  const count = document.getElementById(countId);
+  if (!items || items.length === 0) {
+    container.innerHTML = '<div class="empty-state">暂无新闻数据</div>';
+    count.textContent = '0 条';
+    return;
+  }
+  const shown = items.slice(0, limit);
+  container.innerHTML = shown.map(renderCard).join('');
+  count.textContent = `${items.length} 条`;
+}
+
+function renderGeneralSection(items) {
+  const container = document.getElementById('generalNews');
+  const count = document.getElementById('generalCount');
+  if (!items || items.length === 0) {
+    container.innerHTML = '<div class="empty-state">暂无新闻数据</div>';
+    count.textContent = '0 条';
+    return;
+  }
+  container.innerHTML = items.slice(0, 12).map(renderCard).join('');
+  count.textContent = `${items.length} 条`;
+}
+
+// ─── Render summary ──────────────────────────────────────
+function renderSummary(summary) {
+  document.getElementById('summaryHeadline').textContent = summary.headline || '暂无总结';
+  document.getElementById('summaryComment').textContent = summary.comment || '—';
+  document.getElementById('summaryTime').textContent = summary.generated_at || '—';
+  document.getElementById('aiMeta').textContent = `🤖 ${summary.model || '—'} · 分析 ${summary.item_count || 0} 条新闻`;
+
+  const pointsEl = document.getElementById('summaryPoints');
+  if (summary.points && summary.points.length) {
+    pointsEl.innerHTML = summary.points.map(p => `
+      <div class="point-item">
+        <span class="point-bullet">▸</span>
+        <span>${p}</span>
+      </div>`).join('');
+  } else {
+    pointsEl.innerHTML = '<div style="color:var(--muted);font-size:12px">暂无要点</div>';
+  }
+}
+
+// ─── Render stats ────────────────────────────────────────
+function renderStats(data) {
+  const news = data.news || {};
+  const s = data.summary || {};
+  const total = (news.tech?.length||0) + (news.ai?.length||0) + (news.general?.length||0) + (news.cctv?.length||0);
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statTech').textContent = news.tech?.length || 0;
+  document.getElementById('statAi').textContent = news.ai?.length || 0;
+  document.getElementById('statGeneral').textContent = news.general?.length || 0;
+  document.getElementById('statModel').textContent = s.model || '—';
+  document.getElementById('statTime').textContent = s.generated_at?.slice(11,16) || '—';
+}
+
+// ─── Render history ──────────────────────────────────────
+function renderHistory(dates) {
+  const el = document.getElementById('historyList');
+  if (!dates || dates.length === 0) {
+    el.innerHTML = '<div class="empty-state">暂无历史记录</div>';
+    return;
+  }
+  el.innerHTML = dates.slice(0, 10).map((d, i) => `
+    <div class="history-item" onclick="loadDate('${d}')">
+      <span style="font-size:14px">${i===0?'📌':'📅'}</span>
+      <span class="history-date">${formatDate(d)}</span>
+      ${i===0?'<span style="font-family:DM Mono,monospace;font-size:9px;color:var(--accent);padding:2px 6px;background:rgba(232,197,71,0.1);border-radius:3px;">TODAY</span>':''}
+      <span class="history-arrow">›</span>
+    </div>`).join('');
+}
+
+// ─── Load data ───────────────────────────────────────────
+async function loadDate(dateStr) {
+  const url = dateStr === availableDates[0]
+    ? DATA_BASE + 'latest.json'
+    : DATA_BASE + dateStr + '.json';
+
+  try {
+    const data = await fetchJSON(url);
+
+    // Update header
+    document.getElementById('headerDate').textContent = formatDate(data.date || dateStr);
+    document.getElementById('headerDate').title = data.date;
+
+    // Render
+    renderSummary(data.summary || {});
+    renderSection(data.news?.tech, 'techNews', 'techCount');
+    renderSection(data.news?.ai, 'aiNews', 'aiCount');
+    renderGeneralSection(data.news?.general);
+    renderStats(data);
+
+    // Update nav
+    currentDateIdx = availableDates.indexOf(dateStr);
+    document.getElementById('prevBtn').disabled = currentDateIdx >= availableDates.length - 1;
+    document.getElementById('nextBtn').disabled = currentDateIdx <= 0;
+    document.getElementById('dateSelect').value = dateStr;
+
+  } catch (e) {
+    console.error('加载数据失败:', e);
+  }
+}
+
+function navigateDate(dir) {
+  const newIdx = currentDateIdx + dir;
+  if (newIdx < 0 || newIdx >= availableDates.length) return;
+  currentDateIdx = newIdx;
+  loadDate(availableDates[currentDateIdx]);
+}
+
+// ─── Init ─────────────────────────────────────────────────
+async function init() {
+  try {
+    // Load index
+    const index = await fetchJSON(DATA_BASE + 'index.json');
+    availableDates = index.dates || [];
+
+    // Populate date selector
+    const sel = document.getElementById('dateSelect');
+    sel.innerHTML = availableDates.map(d =>
+      `<option value="${d}">${formatDate(d)}</option>`
+    ).join('');
+
+    // Render history
+    renderHistory(availableDates);
+
+    // Load today
+    if (availableDates.length > 0) {
+      await loadDate(availableDates[0]);
+    }
+  } catch(e) {
+    console.error('初始化失败:', e);
+    document.getElementById('summaryHeadline').textContent = '数据加载失败，请稍后重试';
+  }
+
+  // Hide loading
+  setTimeout(() => {
+    document.getElementById('loadingOverlay').classList.add('hidden');
+  }, 600);
+}
+
+init();
+</script>
+</body>
+</html>
