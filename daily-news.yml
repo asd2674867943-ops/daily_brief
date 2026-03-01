@@ -1,32 +1,38 @@
 name: Daily News
+
 on:
   schedule:
     - cron: '10 14 * * *'
   workflow_dispatch:
+
 permissions:
-  contents: write  # 必须开启写入权限，否则无法更新 data.json
+  contents: write
+
 jobs:
   summarize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Install dependencies
         run: pip install requests feedparser google-genai python-dateutil
+
       - name: Run script
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # 确保这里用的是 GEMINI 的 Key
-        run: python main.py # 确认你的文件名是 main.py 还是在 scripts 文件夹下
-            - name: Commit and push changes
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python main.py
+
+      - name: Commit and push changes
         run: |
           git config --local user.email "bot@github.com"
           git config --local user.name "NewsBot"
           git add data/data.json
-          # 只有当 data.json 有变化时才执行提交
           if ! git diff --staged --quiet; then
             git commit -m "自动更新新闻数据"
-            git pull --rebase origin main  # 关键：先拉取最新更改，防止冲突
+            git pull --rebase origin main
             git push origin main
           fi
