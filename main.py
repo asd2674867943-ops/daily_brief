@@ -25,12 +25,12 @@ def generate_ai_summary(news_dict):
     all_titles = "\n".join([item['title'] for cat in news_dict.values() for item in cat])
     prompt = f"请将以下新闻总结成一段150字以内的中文精炼简报，要求语气专业，包含重点资讯：\n\n{all_titles}"
     
-    try:
-       response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=prompt
-    )
-        return response.text
+           try:
+               response = client.models.generate_content(
+                   model="gemini-2.0-flash",
+                   contents=prompt
+               )
+                return response.text
     except Exception as e:
         print(f"AI 生成失败: {e}")
         return "今日资讯已更新，请查看下方列表。"
