@@ -1,46 +1,62 @@
 import os
+import json
 import feedparser
+from datetime import datetime
 import google.generativeai as genai
 
-# 1. 抓取新闻
-def get_news():
-    rss_url = "https://www.theverge.com/rss/index.xml"
-    feed = feedparser.parse(rss_url)
-    # 提取前10条标题
-    titles = [entry.title for entry in feed.entries[:10]]
-    return "\n".join(titles)
+# 1. 抓取多渠道新闻 (适配模板的分组显示)
+def get_all_news():
+    sources = {
+        "tech": "https://www.theverge.com/rss/index.xml",
+        "general": "https://feeds.bbci.co.uk/news/world/rss.xml"
+    }
+    news_data = {}
+    for category, url in sources.items():
+        feed = feedparser.parse(url)
+        # 提取标题和链接
+        news_data[category] = [{"title": e.title, "link": e.link} for e in feed.entries[:5]]
+    return news_data
 
-# 2. 调用 Gemini 生成简报 (替换了原来的 Anthropic 逻辑)
-def generate_summary(news_text):
-    # 配置 API Key，从 GitHub Secrets 中读取 GEMINI_API_KEY
+# 2. 调用 Gemini 生成结构化总结
+def generate_ai_summary(news_dict):
     genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-    
-    # 使用最新的 Gemini 2.0 Flash 模型，速度快且免费额度高
     model = genai.GenerativeModel('gemini-2.0-flash')
     
-    prompt = f"请将以下新闻标题总结成一份中文简报，要求排版精美，适合网页阅读：\n\n{news_text}"
+    # 将所有标题组合成字符串发给 AI
+    all_titles = "\n".join([item['title'] for cat in news_dict.values() for item in cat])
+    prompt = f"请将以下新闻总结成一段150字以内的中文精炼简报，要求语气专业，包含重点资讯：\n\n{all_titles}"
     
-    response = model.generate_content(prompt)
-    return response.text
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        print(f"AI 生成失败: {e}")
+        return "今日资讯已更新，请查看下方列表。"
 
-# 3. 写入 HTML 文件
-def save_to_html(content):
-    os.makedirs("docs", exist_ok=True)
-    with open("docs/index.html", "w", encoding="utf-8") as f:
-        # 简单加一点样式，让页面好看点
-        html_style = "<style>body{font-family:sans-serif; line-height:1.6; padding:20px; max-width:800px; margin:auto;}</style>"
-        f.write(f"<html><head>{html_style}</head><body>{content}</body></html>")
+# 3. 核心：保存为模板需要的 JSON 格式
+def save_data(news_dict, ai_summary):
+    # 创建 data 目录 (截图显示模板从这里读取数据)
+    os.makedirs("data", exist_ok=True)
+    
+    # 构造模板需要的 JSON 结构
+    final_data = {
+        "last_update": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "ai_summary": ai_summary,
+        "news_list": news_dict,
+        "model_used": "Gemini-2.0-Flash"
+    }
+    
+    with open("data/data.json", "w", encoding="utf-8") as f:
+        json.dump(final_data, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
-    print("正在抓取新闻...")
-    news = get_news()
-    if not news:
-        print("未抓取到新闻内容。")
-    else:
-        print("正在调用 Gemini AI 生成简报...")
-        try:
-            summary = generate_summary(news)
-            save_to_html(summary)
-            print("任务完成！网页已生成在 docs 目录下。")
-        except Exception as e:
-            print(f"生成失败: {e}")
+    print("🚀 开始执行新闻抓取...")
+    news = get_all_news()
+    
+    print("🤖 正在请求 Gemini 生成总结...")
+    summary = generate_ai_summary(news)
+    
+    print("💾 正在保存数据到 data/data.json...")
+    save_data(news, summary)
+    
+    print("✅ 执行完毕！请刷新网页查看。")
