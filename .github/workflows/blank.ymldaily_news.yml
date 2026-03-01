@@ -2,35 +2,37 @@ name: Daily News Summary
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 每天北京时间早上8点自动运行
-  workflow_dispatch: # 允许你手动点击按钮运行
+    - cron: '10 14 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  build:
+  summarize:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        run: pip install requests feedparser google-genai python-dateutil
 
-      - name: Run news summary script
+      - name: Run script
         env:
-          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
-        run: |
-          if [ -f main.py ]; then python main.py; else echo "找不到启动文件 main.py"; exit 1; fi
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python main.py
 
       - name: Commit and push changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          git commit -m "Update news summary" || echo "No changes to commit"
-          git push
+          git config --local user.email "bot@github.com"
+          git config --local user.name "NewsBot"
+          git add data/data.json
+          if ! git diff --staged --quiet; then
+            git commit -m "自动更新新闻数据"
+            git pull --rebase origin main
+            git push origin main
+          fi
