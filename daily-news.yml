@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install requests feedparser google-generativeai python-dateutil
+        run: pip install requests feedparser google-genai python-dateutil
       - name: Run script
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # 确保这里用的是 GEMINI 的 Key
