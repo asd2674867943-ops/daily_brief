@@ -1,8 +1,12 @@
 {
-    "last_update": "2026-03-01 13:23",
+    "last_update": "2026-03-01 14:37",
     "ai_summary": "今日资讯已更新，请查看下方列表。",
     "news_list": {
         "tech": [
+            {
+                "title": "Honor claims its Robot Phone will launch later this year",
+                "link": "https://www.theverge.com/gadgets/887140/honor-robot-phone-mwc-release-date-specs"
+            },
             {
                 "title": "Resident Evil Requiem leans too much on the series’ past",
                 "link": "https://www.theverge.com/games/885811/resident-evil-requiem-grace-leon-nostalgia-ending"
@@ -18,10 +22,6 @@
             {
                 "title": "Honor’s Magic V6 is the first foldable with an IP69 rating",
                 "link": "https://www.theverge.com/tech/887104/honor-magic-v6-thinnest-battery-launch-mwc"
-            },
-            {
-                "title": "Polymarket defends its decision to allow betting on war as ‘invaluable’",
-                "link": "https://www.theverge.com/tech/887040/polymarket-iran-war-betting-invaluable"
             }
         ],
         "general": [
