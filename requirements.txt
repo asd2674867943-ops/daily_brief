@@ -1,2 +1,3 @@
 anthropic
 requests
+feedparser>=6.0.0
