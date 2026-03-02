@@ -5,10 +5,10 @@ from datetime import datetime
 from google import genai
 
 def get_all_news():
-    sources = {
-        "tech": "https://www.theverge.com/rss/index.xml",
-        "general": "https://feeds.bbci.co.uk/news/world/rss.xml"
-    }
+   sources = {
+    "tech": "https://hnrss.org/frontpage",
+    "general": "https://feeds.reuters.com/reuters/topNews"
+}
     news_data = {}
     for category, url in sources.items():
         feed = feedparser.parse(url)
