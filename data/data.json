@@ -1,49 +1,49 @@
 {
-    "last_update": "2026-03-02 01:49",
+    "last_update": "2026-03-02 15:00",
     "ai_summary": "今日资讯已更新，请查看下方列表。",
     "news": {
         "tech": [
             {
-                "title": "Allegations of insider trading over prediction-market bets tied to Iran conflict",
-                "link": "https://www.morningstar.com/news/marketwatch/20260301140/allegations-of-insider-trading-over-prediction-market-bets-tied-to-iran-conflict"
+                "title": "Anthropic Cowork feature creates 10GB VM bundle on macOS without warning",
+                "link": "https://github.com/anthropics/claude-code/issues/22543"
             },
             {
-                "title": "Little Free Library Books",
-                "link": "https://littlefreelibrary.org/"
+                "title": "An Interesting Find: STM32 RDP1 Decryptor",
+                "link": "https://carlossless.io/stm32-rdp1-decryptor/"
             },
             {
-                "title": "WebMCP is available for early preview",
-                "link": "https://developer.chrome.com/blog/webmcp-epp"
+                "title": "Apple introduces the new iPad Air, powered by M4",
+                "link": "https://www.apple.com/newsroom/2026/03/apple-introduces-the-new-ipad-air-powered-by-m4/"
             },
             {
-                "title": "South Korean Police Lose Seized Crypto by Posting Password Online",
-                "link": "https://gizmodo.com/south-korean-police-lose-seized-crypto-by-posting-password-online-2000728191"
+                "title": "OpenClaw Surpasses React to Become the Most-Starred Software Project on GitHub",
+                "link": "https://www.star-history.com/blog/openclaw-surpasses-react-most-starred-software"
             },
             {
-                "title": "Are the Mysteries of Quantum Mechanics Beginning to Dissolve?",
-                "link": "https://www.quantamagazine.org/are-the-mysteries-of-quantum-mechanics-beginning-to-dissolve-20260213/"
+                "title": "AMD Am386 released March 2, 1991",
+                "link": "https://dfarq.homeip.net/amd-am386-released-march-2-1991/"
             }
         ],
         "general": [
             {
-                "title": "Who Could Take Over for Ayatollah Ali Khamenei?",
-                "link": "https://www.nytimes.com/2026/02/28/world/middleeast/ali-khamenei-iran-leader-succession.html"
+                "title": "Live Updates: Mideast Conflict Widens as U.S. Officials Say Iran Operation Is in Early Stages",
+                "link": "https://www.nytimes.com/live/2026/03/02/world/iran-us-israel-attack-trump"
             },
             {
-                "title": "‘It’s Surreal’: Iranians in Disbelief After Supreme Leader Is Killed",
-                "link": "https://www.nytimes.com/2026/03/01/world/middleeast/iran-disbelief-khamenei-assassination.html"
+                "title": "3 U.S. Planes Are Shot Down in ‘Friendly Fire’ in Kuwait, U.S. Military Says",
+                "link": "https://www.nytimes.com/2026/03/02/world/middleeast/iran-kuwait-us-attack-planes.html"
             },
             {
-                "title": "After Attack on Iran by the U.S. and Israel, See Photos and Videos From the Middle East",
-                "link": "https://www.nytimes.com/2026/02/28/world/middleeast/iran-israel-trump-attack-photos.html"
+                "title": "As Trump Bombs Iran, America’s Allies Watch Fitfully From Sidelines",
+                "link": "https://www.nytimes.com/2026/03/02/world/europe/trump-iran-europe.html"
             },
             {
-                "title": "Iran Attacks Dubai, Abu Dhabi, Qatar and Bahrain After U.S.-Israeli Strikes",
-                "link": "https://www.nytimes.com/2026/03/01/world/middleeast/iran-attacks-dubai-persian-gulf-countries-retaliation.html"
+                "title": "Bagram Air Base Targeted by Pakistan, Afghanistan Says",
+                "link": "https://www.nytimes.com/2026/03/02/world/asia/pakistan-afghanistan-bagram-attack.html"
             },
             {
-                "title": "The U.S. Released the Epstein Files. The Arrests Are Overseas.",
-                "link": "https://www.nytimes.com/2026/03/01/world/europe/epstein-files-arrests-europe-uk.html"
+                "title": "What to Know About the Widening Fallout From the Bombing of Iran",
+                "link": "https://www.nytimes.com/2026/03/02/world/middleeast/iran-attacks-damage-what-to-know.html"
             }
         ]
     },
