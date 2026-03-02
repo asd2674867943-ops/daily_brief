@@ -34,7 +34,7 @@ def save_data(news_dict, ai_summary):
     final_data = {
         "last_update": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "ai_summary": ai_summary,
-        "news_list": news_dict,
+        "news": news_dict,
         "model_used": "Gemini-2.0-Flash"
     }
     with open("data/data.json", "w", encoding="utf-8") as f:
