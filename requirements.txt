@@ -1,2 +1,4 @@
+requests
 feedparser
-google-genai
+openai
+python-dateutil
