@@ -5,10 +5,10 @@ from datetime import datetime
 from google import genai
 
 def get_all_news():
-   sources = {
-    "tech": "https://hnrss.org/frontpage",
-    "general": "https://feeds.reuters.com/reuters/topNews"
-}
+    sources = {
+        "tech": "https://hnrss.org/frontpage",
+        "general": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
+    }
     news_data = {}
     for category, url in sources.items():
         feed = feedparser.parse(url)
@@ -41,10 +41,10 @@ def save_data(news_dict, ai_summary):
         json.dump(final_data, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
-    print("🚀 开始执行新闻抓取...")
+    print("开始执行新闻抓取...")
     news = get_all_news()
-    print("🤖 正在请求 Gemini 生成总结...")
+    print("正在请求 Gemini 生成总结...")
     summary = generate_ai_summary(news)
-    print("💾 正在保存数据到 data/data.json...")
+    print("正在保存数据...")
     save_data(news, summary)
-    print("✅ 执行完毕！请刷新网页查看。")
+    print("执行完毕！")
